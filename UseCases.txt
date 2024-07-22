@@ -1,0 +1,16 @@
+
+**********************************************************************************************************************
+********************************************* USE CASES **************************************************************
+**********************************************************************************************************************
+
+    - Simple Login                      (Open ID Connect) - Authentication
+    - Single Sign-On Acess Sites        (Open ID Connect) - Authentication
+    - Mobile App Login                  (Open ID Connect) - Authentication
+    - Delegated Authorization           (OAuth 2.0)       - Authorization
+
+Which GRANT TYPES do i use?
+
+    Web Application with a backend server:       AUTHORISATION CODE FLOW
+    Native Mobile App:                           AUTHORISATION CODE FLOW with PKCE (Proof Key Code Exchange)
+    JavaScript App (SPA) with API backend:       IMPLICIT FLOW
+    Microservices and API's:                     ClIENT CREDENTIALS FLOW
