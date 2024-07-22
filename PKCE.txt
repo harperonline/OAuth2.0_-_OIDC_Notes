@@ -1,0 +1,74 @@
+************************* PKCE *******************************
+************* Proof Key for Code Exchange ********************
+**************************************************************
+
+Pronounced 'Pixie' - Uses the 'PKCE GRANT TYPE'
+
+Only use it with a AUTHORIZATION CODE GRANT TYPES. 
+
+* A superset of feature ON TOP of OAuth2.0 Authorisation code grant type
+* Only server side apps (BACK CHANNEL) are private and can store SECRETS!
+
+To authenticate public applications or single-page applications against Authorization server, 
+it is recommended to adapt the Authorization Code flow with PKCE (Proof Key for Code Exchange). 
+Here’s how it works.
+
+When the user initiates an authorization flow, the application computes a code_verifier. 
+This is a random string between 43 and 128 characters and must contain only alphanumeric characters and punctuation characters -, ., _, ~.
+
+Next up, the application computes a code_challenge starting from the code_verifier.
+code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
+The application directs the browser to a sign-in page along with the generated code challenge.
+Once the user authenticates, APS redirects back to your native application with an authorization code.
+
+Then, your application sends this code along with the code verifier to APS. APS returns an access token, refresh token, and optionally an ID token.
+To generate the code challenge, we can employ the shell script.
+
+  Process:
+
+  1. Generate a 'code verifier' The CLIENT normally does this. 
+  2. Hash the 'code verifier' into a 'code challenge'. The CLIENT normally does this
+  3. Request the AUTHORISATION CODE but add in the CODE CHALLENGE
+
+    Example HTTP GET:
+    
+    https://{yourDomain}/authorize?
+        response_type=code&
+        code_challenge={codeChallenge}&
+        code_challenge_method=S256&
+        client_id={yourClientId}&
+        redirect_uri={yourCallbackUrl}&
+        nonce=defaultNonce&
+        scope=SCOPE&
+        state={state}
+
+    Example:
+
+    https://reghomeserve.b2clogin.com/reghomeserve.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SIGN_UP_OR_SIGN_IN&
+        code_challenge=<code>&code_challenge_method=S256&
+        client_id=<client_id>&
+        nonce=defaultNonce&
+        redirect_uri=https%3A%2F%2Foidcdebugger.com%2Fdebug&
+        scope=openid&
+        response_type=code&
+        prompt=login
+
+  4. When you get the AUTHORISATION CODE back, request the ACCESS TOKEN but include the 
+     CODE CHALLENGE alongside the AUTHORISATION CODE. 
+  5. The IDP will use this challenge to verify the request and return the access token. 
+
+
+************************** HOW TO GENERATE A CODE CHALLENGE ************************
+
+https://aps.autodesk.com/en/docs/oauth/v2/tutorials/code-challenge/
+
+Using Shell Script
+******************
+#!/usr/bin/sh
+code_verifier=$(openssl rand -base64 60 | tr -d "\n" | tr '/+' '_-' | tr -d '=')
+echo "code_verifier=$code_verifier"
+code_challenge=$(printf $code_verifier | shasum -a 256 | head -c 64 | xxd -r -p - | openssl base64 | tr '/+' '_-' | tr -d '=')
+echo "code_challenge=$code_challenge"
+
+
+
