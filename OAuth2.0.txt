@@ -11,11 +11,14 @@ This is for AUTHORISATION and not authentication. Think about this as WHAT you a
 like if you are allowed to access like contacts in a system or can read from an API (a bit like CRUD operations). 
 It's NOT about the user's details like email address etc - That's dealt with later in OIDC :-) 
 
-This place where this data is stored is called the RESOURCE SERVER for some reason. The owner of this data is 
+This place where this data is stored is called the RESOURCE SERVER. The owner of this data is 
 called the RESOURCE OWNER. 
 
 This server that controls AUTHORISATION is called the AUTHORISATION SERVER. B2C, ForgeRock, OKTA, Facebook 
-are examples of AUTHORISATION SERVERS. These servers issue AUTHORISATION CODES and ACCESS TOKENS. 
+are examples of AUTHORISATION SERVERS. These servers issue AUTHORISATION CODES and ACCESS/ID TOKENS.
+    
+    - ACCESS TOKENS: What the client can do 
+    - ID TOKENS: About the RESOURCE OWNER
 
 AUTHORISATION CODES are issued by the AUTHORISATION SERVER and these defines what the client can see. This 
 definition of what can be seen is called a SCOPE. A scope can be things like 'contacts' or 'profile' or and 
@@ -23,21 +26,21 @@ data that the RESOURCE OWNER wishes to share.
 
             Definitions:
 
-            * RESOURCE OWNER - The owner of the data
-            * CLIENT - The application that needs to access the data 
-            * AUTHORSATION SERVER - The system that manages the authorisation like B2C 
+            * RESOURCE OWNER - The owner of the data.
+            * CLIENT - The application that needs to access the data.
+            * AUTHORSATION SERVER - The system that manages the authorisation like B2C.
             * AUTHORISATION CODE - The code returned to the CLIENT and doesn't do much. It needs to be swapped for an ACCESS TOKEN.     
             * RESOURCE SERVER - The system that holds the data like contact information. 
-                (B2C is both the AUTHORISATION SERVER and RESOURCE SERVER as in manages access to the data that IT stores)
-            * AUTHORISATION GRANT - The thing that proves that authorisation is given (CODE or TOKEN)
-            * REDIRECT URL/CALLBACK - The URL that the AUTHORISATION SERVER sends the CODE or TOKEN back to within the CLIENT
-            * ACCESS TOKEN - The 'key' that is given to the client to get into the data on the RESOURCE SERVER
-            * ACCESS TOKEN 'SCOPE' - The permissions level allocated to the ACCESS TOKEN. Examples: Email.READ, Contacts.READ etc
+                (B2C is both the AUTHORISATION SERVER and RESOURCE SERVER as in manages access to the data that IT stores).
+            * AUTHORISATION GRANT - The thing that proves that authorisation is given (CODE or TOKEN).
+            * REDIRECT URL/CALLBACK - The URL that the AUTHORISATION SERVER sends the CODE or TOKEN back to within the CLIENT.
+            * ACCESS TOKEN - The 'key' that is given to the client to get into the data on the RESOURCE SERVER.
+            * ACCESS TOKEN 'SCOPE' - The permissions level allocated to the ACCESS TOKEN. Examples: Email.READ, Contacts.READ etc.
             
-            * FRONT CHANNEL - Browser to Server (Less secure and things can be seem on the query string)
+            * FRONT CHANNEL - Browser to Server (Less secure and things can be seem on the query string).
                 (Getting an AUTHORISATION CODE is FRONT CHANNEL Request as it's a GET request)
-            * BACK CHANNEL - Server to Server communication where the code if hidden from the user (very secure)
-                (To exchange a AUTHORISATION CODE for an ACCESS TOKEN happens on the BACK CHANNEL as the client app server makes this call 
+            * BACK CHANNEL - Server to Server communication where the code if hidden from the user (very secure).
+                (To exchange a AUTHORISATION CODE for an ACCESS TOKEN happens on the BACK CHANNEL as the client app server makes this call.
                 via a POST request and the browser is not involved)
                 (Also - Any use of the ACCESS TOKEN is always made by the server via the back channel and NOT the browser)
 
@@ -66,7 +69,7 @@ STEP 2. BACK CHANNEL REQUEST TO GET AN ACCESS TOKEN:
 
 RESPONSE:
 {
-    "access_token": "dgaderoovmemrnvreunvununenf9n9ffunewngugnuien",
+    "access_token": "<access token>",
     "expires_in": 3600,
     "token_type": "Bearer"
 }
@@ -74,15 +77,14 @@ RESPONSE:
 STEP 3. BACK CHANNEL REQUEST TO GET DATA USING ACCESS TOKEN:
     
     GET api.google.com/some/API
-    Authorization: Bearer dgaderoovmemrnvreunvununenf9n9ffunewngugnuien (It's down the API system to verify the token)
+    Authorization: Bearer <access token> (It's down the API system to verify the token)
 
 ************************************************************************************************************************
 
-MORE ON AUTHORIZATION GRANTS:
+MORE ON AUTHORISATION GRANTS:
 -----------------------------
 
     AUTHORISATION CODE FLOW (CODE FLOW): Front channel + back channel (when both are available)
-        Webapps and Mobile App use this
 
     IMPLICIT FLOW: Front channel only (when we need just then token and no back channel is available)
         'Just give the token, ignore code'. Examples - SPA in React apps where there is no backend server. 

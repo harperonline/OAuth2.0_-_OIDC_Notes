@@ -12,27 +12,27 @@ OIDC (Open ID Connect) - This is for AUTHENTICATION (Getting User Information) a
 
 What does OpenID Connect Add to OAuth2.0?
 
-    - ID TOKEN (Has info about the user, NOT their authorization levels)
-    - USERINFO zendpoint for getting more user information if the stuff in the ID Token isn't enough. 
-    - Standard set of scopes 
-    - Standardised Implementation
+    - ID TOKEN: (Has info about the user but not their authorization levels).
+    - USERINFO: An endpoint for getting more user information if the stuff in the ID Token isn't enough. 
+    - Standard set of scopes.
+    - Standardised Implementation.
 
 In summary, if there is an AUTHORISATION SERVER that supports both OAuth2.0 and OIDC, you can get both an ID Token to 
-identify the user and an ACCESS TOKEN to see what the user is allow to see.
+identify the user and an ACCESS TOKEN to see what the user is allow to see and do.
 
-OpenID Connect uses the AUTHORISATION CODE FLOW but the SCOPE is 'openid' which tells the AUTHORISATION SERVER that the 
-client needs an AUTHORISATION CODE that can be swapped for an ID TOKEN and ACCESS TOKEN with the AUTHORISATION SERVER. 
+OpenID Connect uses the AUTHORISATION CODE FLOW/GRANT TYPE but the SCOPE is 'openid' which tells the AUTHORISATION SERVER that the 
+client needs an AUTHORISATION CODE that can later be swapped for an ID TOKEN and ACCESS TOKEN with the AUTHORISATION SERVER. 
 The ACCESS TOKEN is used to get more information about the user from the USER INFO endpoint. 
 
-OpenID Connect supports both CODE FLOW (ID TOKEN and ACCESS TOKEN) via back channels and IMPLICIT FLOW (ID TOKEN straight back) 
-via the front channel. 
+OpenID Connect supports both AUTHORISATION CODE FLOW (for ID TOKENS and ACCESS TOKENS using an AUTHORISATION CODE) via back channels 
+and IMPLICIT FLOW (ID TOKEN or ACCESS TOKEN without and AUTHORISATION CODE) via the front channel. 
 
 THE ID TOKEN in a 'Java Web Token' or JWT or pronounced 'JOT'. 
 
-MORE ON AUTHORIZATION GRANTS:
+MORE ON AUTHORISATION GRANTS:
 -----------------------------
+
     AUTHORISATION CODE FLOW (CODE FLOW): Front channel + back channel (when both are available)
-        Webapps and Mobile App use this
 
     IMPLICIT FLOW: Front channel only (when we need just then token and no back channel is available)
         'Just give the token, ignore code'. Examples - SPA in React apps where there is no backend server. 

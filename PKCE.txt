@@ -2,12 +2,12 @@
 ************* Proof Key for Code Exchange ********************
 **************************************************************
 
-Pronounced 'Pixie' - Uses the 'PKCE GRANT TYPE'
+Pronounced 'Pixy' - Uses the 'PKCE GRANT TYPE'.
 
-Only use it with a AUTHORIZATION CODE GRANT TYPES. 
+Only use it with a AUTHORISATION CODE GRANT TYPES. 
 
-* A superset of feature ON TOP of OAuth2.0 Authorisation code grant type
-* Only server side apps (BACK CHANNEL) are private and can store SECRETS!
+* PKCE is a superset of feature on top of OAuth2.0 Authorisation code grant type
+* Only server-side to server-side apps (back channel) are private and can store SECRETS!
 
 To authenticate public applications or single-page applications against Authorization server, 
 it is recommended to adapt the Authorization Code flow with PKCE (Proof Key for Code Exchange). 
@@ -24,13 +24,13 @@ Once the user authenticates, APS redirects back to your native application with 
 Then, your application sends this code along with the code verifier to APS. APS returns an access token, refresh token, and optionally an ID token.
 To generate the code challenge, we can employ the shell script.
 
-  Process:
+  The Process:
 
   1. Generate a 'code verifier' The CLIENT normally does this. 
-  2. Hash the 'code verifier' into a 'code challenge'. The CLIENT normally does this
-  3. Request the AUTHORISATION CODE but add in the CODE CHALLENGE
+  2. Hash the 'code verifier' into a 'code challenge'. The CLIENT normally does this.
+  3. Request the AUTHORISATION CODE but add in the CODE CHALLENGE.
 
-    Example HTTP GET:
+    Example HTTP GET for an AUTHORISATION CODE:
     
     https://{yourDomain}/authorize?
         response_type=code&
